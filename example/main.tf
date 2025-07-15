@@ -1,20 +1,26 @@
-data "aws_vpc" "default" {                                   
-  default = true                                             
-}                                                            
- 
- 
-data "aws_subnets" "default" {                               
-  filter {                                                   
-    name   = "vpc-id"                                        
-    values = [data.aws_vpc.default.id]                       
-  }                                                          
-}                                                            
- 
-module "test_instance" {
-  source    = "../"
-  subnet_id = data.aws_subnets.default.ids[0]                
+data "aws_vpc" "default" {
+  default = true
 }
- 
-output "aws_instance_arn" {                                  
-  value = module.test_instance.aws_instance_arn
+
+
+data "aws_subnets" "default" {
+  filter {
+    name   = "vpc-id"
+    values = [data.aws_vpc.default.id]
+  }
+}
+
+module "test_instance" {
+  source         = "../"
+  subnet_id      = data.aws_subnets.default.ids[0]
+  instance_count = 1
+  name_prefix    = "Example Instance"
+  tags = {
+    Environment = "Test"
+    Project     = "Terraform Example"
+  }
+}
+
+output "aws_instance_arn" {
+  value = module.test_instance[*].aws_instance_arn
 }
