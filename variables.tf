@@ -41,13 +41,19 @@ variable "instance_count" {
   type        = number
   description = "The number of instances to launch."
   default     = 0
-  validation {                                             
+  validation {
     condition     = can(parseint(tostring(var.instance_count), 10))
     error_message = "The instance count must be a whole number."
   }
- 
+
   validation {
-    condition     = var.instance_count >= 0                   
+    condition     = var.instance_count >= 0
     error_message = "The instance count can not be negative."
   }
+}
+
+variable "enable_systems_manager" {
+  type        = bool
+  description = "When enabled the Systems Manager IAM Policy will be attached to the instance."
+  default     = false
 }

@@ -13,11 +13,12 @@ data "aws_subnets" "default" {
 module "test_instance" {
   source         = "../"
   subnet_id      = data.aws_subnets.default.ids[0]
-  instance_count = 1
-  name_prefix    = "Example Instance"
+  instance_count = 3
+  name_prefix    = "dondon-instance"
+  enable_systems_manager = true
   tags = {
     Environment = "Test"
-    Project     = "Terraform Example"
+    Project     = "Terraform Dondon"
   }
 }
 
